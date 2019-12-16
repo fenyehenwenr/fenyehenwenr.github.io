@@ -18,7 +18,7 @@
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/2019/11/10/nginx/">
+    <link rel="canonical" href="http://yoursite.com/2019/12/06/nginx/">
 
     <!-- Bootstrap Core CSS -->
 
@@ -129,7 +129,7 @@
                         <h2 class="subheading"></h2>
                         <span class="meta">
                             Posted by 尹盼 on
-                            2019-11-10
+                            2019-12-06
                         </span>
                     </div>
                 
@@ -181,7 +181,7 @@
                         
                         <li>
            
-                            <a  href="#">关于我</a>
+                            <a  href="#">工作</a>
                            
                         </li>
                         
@@ -191,6 +191,15 @@
                         <li>
            
                             <a  href="#">生活</a>
+                           
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+           
+                            <a  href="#">关于我</a>
                            
                         </li>
                         
@@ -252,11 +261,11 @@
 <p>1、什么是nginx？nginx可以做些什么？<br>Nginx 是高性能的 HTTP 和反向代理的服务器，处理高并发能力是十分强大的，能经受高负载的考验,有报告表明能支持高达 50,000 个并发连接数，中国大陆使用nginx网站用户有：百度、京东、新浪、网易、腾讯、淘宝等。</p>
 <p>Nginx提供了正向代理，反向代理，动静分离，负载均衡以及Nginx搭建高可用集群。</p>
 <p>2、正向代理<br>Nginx 不仅可以做反向代理，实现负载均衡。还能用作正向代理来进行上网等功能。<br>正向代理：如果把局域网外的 Internet 想象成一个巨大的资源库，则局域网中的客户端要访问 Internet，则需要通过代理服务器来访问，这种代理服务就称为正向代理。如下图（用visio随便画了一下）</p>
-<p>需要在客户端配置代理服务器进行指定网站访问</p>
-<p>  3、反向代理<br>反向代理，其实客户端对代理是无感知的，因为客户端不需要任何配置就可以访问，我们只需要将请求发送到反向代理服务器由反向代理服务器去选择目标服务器获取数据后，在返回给客户端，此时反向代理服务器和目标服务器对外就是一个服务器，暴露的是代理服务器地址，隐藏了真实服务器 IP 地址。</p>
+<p>需要在客户端配置代理服务器进行指定网站访问<br>　<img src="/img/nginx/01.png" alt=""></p>
+<p>  3、反向代理<br>反向代理，其实客户端对代理是无感知的，因为客户端不需要任何配置就可以访问，我们只需要将请求发送到反向代理服务器由反向代理服务器去选择目标服务器获取数据后，在返回给客户端，此时反向代理服务器和目标服务器对外就是一个服务器，暴露的是代理服务器地址，隐藏了真实服务器 IP 地址。<br>　<img src="/img/nginx/02.png" alt=""></p>
 <p>4、负载均衡<br>客户端发送多个请求到服务器，服务器处理请求，有一些可能要与数据库进行交互，服务器处理完毕后，再将结果返回给客户端。这种架构模式对于早期的系统相对单一，并发请求相对较少的情况下是比较适合的，成本也低。但是随着信息数量的不断增长，访问量和数据量的飞速增长，以及系统业务的复杂度增加，这种架构会造成服务器相应客户端的请求日益缓慢，并发量特别大的时候，还容易造成服务器直接崩溃。很明显这是由于服务器性能的瓶颈造成的问题，那么如何解决这种情况呢？</p>
-<p>增加服务器的数量，然后将请求分发到各个服务器上，将原先请求集中到单个服务器上的情况改为将请求分发到多个服务器上，将负载分发到不同的服务器，也就是我们所说的负载均衡。</p>
-<p>5、动静分离<br>为了加快网站的解析速度，可以把动态页面和静态页面由不同的服务器来解析，加快解析速度。降低原来单个服务器的压力。</p>
+<p>增加服务器的数量，然后将请求分发到各个服务器上，将原先请求集中到单个服务器上的情况改为将请求分发到多个服务器上，将负载分发到不同的服务器，也就是我们所说的负载均衡。<br>　<img src="/img/nginx/03.png" alt=""></p>
+<p>5、动静分离<br>为了加快网站的解析速度，可以把动态页面和静态页面由不同的服务器来解析，加快解析速度。降低原来单个服务器的压力。<br>　<img src="/img/nginx/04.png" alt=""></p>
 <p>Liunx下安装Nginx<br>windows下安装就不用说了，下载解压后就可以直接运行用。</p>
 <p>nginx官网，点击进去下载：<a href="http://nginx.org/" target="_blank" rel="noopener">http://nginx.org/</a></p>
 <p>开始进行 nginx  安装</p>
@@ -265,49 +274,57 @@
 <p> 第二步  解压压缩文件<br> 使用命令 tar –xvf pcre-8.37.tar.gz<br> 第三步./configure  完成后，回到 pcre  目录下执行 make ，最后执行 make install</p>
 <p>（2 ）安装 openssl  、zlib  、 gcc  依赖，联网执行以下命令<br>   yum -y install make zlib zlib-devel gcc-c++ libtool openssl openssl-devel</p>
 <p>（3）安装 nginx<br>  1、 解压缩 nginx-xx.tar.gz 包。<br>  2、 进入解压缩目录，执行./configure。<br>  3、 make &amp;&amp; make install</p>
-<pre><code>进入目录 /usr/local/nginx/sbin/nginx  启动服务</code></pre><p>这样就成功安装好啦。</p>
+<pre><code>进入目录 /usr/local/nginx/sbin/nginx  启动服务</code></pre><p>　<img src="/img/nginx/05.png" alt=""></p>
+<p>这样就成功安装好啦。</p>
 <p> 在 windows  系统中访问 linux  中 nginx ，默认不能访问的，因为防火墙问题<br>（1 ）关闭防火墙<br>（2 ）开放访问的端口号，80  端口<br>查看开放的端口号<br>firewall-cmd –list-all<br>设置开放的端口号<br>firewall-cmd –add-service=http –permanent<br>firewall-cmd –add-port=80/tcp –permanent<br>重启防火墙<br>firewall-cmd –reload</p>
-<p>再用windows浏览器访问liunx的ip地址</p>
+<p>再用windows浏览器访问liunx的ip地址<br>　<img src="/img/nginx/06.png" alt=""></p>
 <p>Nginx  的常用的命令<br>1、启动nginx命令</p>
 <p>  在/usr/local/nginx/sbin 目录下执行 ./nginx</p>
 <p>2、关闭命令<br>  在/usr/local/nginx/sbin 目录下执行 ./nginx -s stop</p>
 <p>3、重新加载命令</p>
 <p> 在/usr/local/nginx/sbin 目录下执行 ./nginx -s reload</p>
 <p>Nginx的nginx.conf 配置文件<br>1、nginx 安装目录下，其默认的配置文件都放在这个目录的 conf 目录下，而主配置文件nginx.conf 也在其中，后续对 nginx 的使用基本上都是对此配置文件进行相应的修改</p>
+<p>　<img src="/img/nginx/07.png" alt=""></p>
 <p>2 、配置文件中的内容<br>包含三部分内容<br>（1 ）全局块：配置服务器整体运行的配置指令比如 worker_processes 1; 处理并发数的配置</p>
 <p>从配置文件开始到 events 块之间的内容，主要会设置一些影响 nginx 服务器整体运行的配置指令，主要包括配置运行 Nginx 服务器的用户（组）、允许生成的 worker process 数，进程 PID 存放路径、日志存放路径和类型以及配置文件的引入等。这是 Nginx 服务器并发处理服务的关键配置，worker_processes 值越大，可以支持的并发处理量也越多，但是会受到硬件、软件等设备的制约。</p>
-<p>（2 ）events  块 ：影响 Nginx  服务器与用户的网络连接比如 worker_connections 1024;  支持的最大连接数为 1024。events 块涉及的指令主要影响 Nginx 服务器与用户的网络连接，常用的设置包括是否开启对多 work process下的网络连接进行序列化，是否允许同时接收多个网络连接，选取哪种事件驱动模型来处理连接请求，每个 wordprocess 可以同时支持的最大连接数等。下述例子就表示每个 work process 支持的最大连接数为 1024。这部分的配置对 Nginx 的性能影响较大，在实际中应该灵活配置</p>
+<p>（2 ）events  块 ：影响 Nginx  服务器与用户的网络连接比如 worker_connections 1024;  支持的最大连接数为 1024。events 块涉及的指令主要影响 Nginx 服务器与用户的网络连接，常用的设置包括是否开启对多 work process下的网络连接进行序列化，是否允许同时接收多个网络连接，选取哪种事件驱动模型来处理连接请求，每个 wordprocess 可以同时支持的最大连接数等。下述例子就表示每个 work process 支持的最大连接数为 1024。这部分的配置对 Nginx 的性能影响较大，在实际中应该灵活配置<br>　<img src="/img/nginx/08.png" alt=""></p>
 <p>（3 ）http 块：</p>
 <p>这算是 Nginx 服务器配置中最频繁的部分，代理、缓存和日志定义等绝大多数功能和第三方模块的配置都在这里。需要注意的是：http 块也可以包括 http 全局块、server 块。</p>
 <p>http 全局块配置的指令包括文件引入、MIME-TYPE 定义、日志自定义、连接超时时间、单链接请求数上限等</p>
-<p>server 块</p>
+<p>　<img src="/img/nginx/09.png" alt=""><br>server 块</p>
 <p>这块和虚拟主机有密切关系，虚拟主机从用户角度看，和一台独立的硬件主机是完全一样的，该技术的产生是为了节省互联网服务器硬件成本。每个 http 块可以包括多个 server 块，而每个 server 块就相当于一个虚拟主机。而每个 server 块也分为全局 server 块，以及可以同时包含多个 locaton 块。<br>1、全局 server 块<br>最常见的配置是本虚拟机主机的监听配置和本虚拟主机的名称或 IP 配置。<br>2、location 块<br>一个 server 块可以配置多个 location 块。<br>这块的主要作用是基于 Nginx 服务器接收到的请求字符串（例如 server_name/uri-string），对虚拟主机名称（也可以是 IP 别名）之外的字符串（例如 前面的 /uri-string）进行匹配，对特定的请求进行处理。地址定向、数据缓存和应答控制等功能，还有许多第三方模块的配置也在这里进行</p>
+<p>　<img src="/img/nginx/10.png" alt=""></p>
 <p>nginx  配置实例-配置反向代理<br>实例1<br>实现效果：使用 nginx 反向代理，访问 www .aaa.com 直接跳转到 127.0.0.1:8080</p>
-<p>1、 启动一个 tomcat，浏览器地址栏输入 127.0.0.1:8080,会出现如下</p>
+<p>1、 启动一个 tomcat，浏览器地址栏输入 127.0.0.1:8080,会出现如下<br>　<img src="/img/nginx/11.png" alt=""></p>
 <p>2、通过修改本地 host 文件，将 www .aaa.com 映射到 127.0.0.1</p>
 <p>host文件的路径在：C:\Windows\System32\drivers\etc</p>
+<p>　<img src="/img/nginx/12.png" alt=""></p>
 <p>打开hosts文件 在尾部添加 127.0.0.1:8080 <a href="http://www.aaa.com" target="_blank" rel="noopener">www.aaa.com</a></p>
+<p>　<img src="/img/nginx/13.png" alt=""></p>
 <p>配置完成之后，我们便可以通过 <a href="http://www.123.com:8080" target="_blank" rel="noopener">www.123.com:8080</a> 访问到第一步出现的 Tomcat 初始界面</p>
 <p>为什么会这样呢？大家都知道在浏览器输入一个网址中间过程是什么样的吧，不知道的可以去百度一下，这里不讲解</p>
 <p>在浏览器输入一个网址首先会在你的本地hosts文件李查找有没有这个网址，有的话就会直接返回这个网址通过对应的ip去访问。</p>
 <p>我们知道用户是不用输入端口号的，那么如何只需要输入 <a href="http://www.aaa.com" target="_blank" rel="noopener">www.aaa.com</a> 便可以跳转到 Tomcat 初始界面呢？便用到 nginx的反向代理</p>
-<p> 在 nginx.conf 做如下配置</p>
+<p> 在 nginx.conf 做如下配置<br>　<img src="/img/nginx/14.png" alt=""></p>
 <p>如上配置，我们监听 80 端口，访问域名为 <a href="http://www.aaa.com，不加端口号时默认为" target="_blank" rel="noopener">www.aaa.com，不加端口号时默认为</a> 80 端口，故访问该域名时会跳转到 127.0.0.1:8080 路径上。在浏览器端输入 <a href="http://www.aaa.com" target="_blank" rel="noopener">www.aaa.com</a> 就会跳转到tomcat的首页了，是不是很简单呐。</p>
 <p>实例2<br>使用 nginx 反向代理，根据访问的路径跳转到不同端口的服务中 nginx 监听端口为 8088，<br>访问 <a href="http://127.0.0.1" target="_blank" rel="noopener">http://127.0.0.1</a>: 8088/aaa/ 直接跳转到 127.0.0.1:8081<br>访问 <a href="http://127.0.0.1" target="_blank" rel="noopener">http://127.0.0.1</a>: 8088/bbb/ 直接跳转到 127.0.0.1:8082</p>
 <p>1、配置两个 tomcat，一个 8001 端口，一个 8002 端口，并准备好测试的页面。</p>
-<p>2、修改 nginx 的配置文件 在 http 块中添加 server{ }</p>
+<p>2、修改 nginx 的配置文件 在 http 块中添加 server{ }<br>　<img src="/img/nginx/15.png" alt=""></p>
 <p>location  指令说明<br>该指令用于匹配 URL。<br>语法如下：</p>
 <p>location  [ = |  ~  |  <del>*  |  ^</del>] url {</p>
 <p>}<br>1、= ：用于不含正则表达式的 uri 前，要求请求字符串与 uri 严格匹配，如果匹配成功，就停止继续向下搜索并立即处理该请求。<br>2、<del>：用于表示 uri 包含正则表达式，并且区分大小写。<br>3、</del><em>：用于表示 uri 包含正则表达式，并且不区分大小写。<br>4、^~：用于不含正则表达式的 uri 前，要求 Nginx 服务器找到标识 uri 和请求字<br>符串匹配度最高的 location 后，立即使用此 location 处理请求，而不再使用 location块中的正则 uri 和请求字符串做匹配。<br>注意：如果 uri 包含正则表达式，则必须要有 ~ 或者 ~</em> 标识。</p>
 <p> nginx  配置实例-负载均衡<br>  首先准备两个同时启动的 Tomcat，</p>
 <p>   在 nginx  的配置文件中进行负载均衡的配置</p>
+<p>  　<img src="/img/nginx/16.png" alt=""></p>
 <p>  nginx  分配服务器策略</p>
-<p>第一种  轮询（默认）<br>每个请求按时间顺序逐一分配到不同的后端服务器，如果后端服务器 down 。 掉，能自动剔除。<br>第二种 weight<br>weight  代表权重默认为 1, 权重越高被分配的客户端越多<br>第三种 ip_hash<br>每个请求按访问 ip 的 的 hash  结果分配，这样每个访客固定访问一个后端服务器<br>第四种 fair （第三方）<br>按后端服务器的响应时间来分配请求，响应时间短的优先分配。如下：</p>
+<p>第一种  轮询（默认）<br>每个请求按时间顺序逐一分配到不同的后端服务器，如果后端服务器 down 。 掉，能自动剔除。<br>第二种 weight<br>weight  代表权重默认为 1, 权重越高被分配的客户端越多<br>第三种 ip_hash<br>每个请求按访问 ip 的 的 hash  结果分配，这样每个访客固定访问一个后端服务器<br>第四种 fair （第三方）<br>按后端服务器的响应时间来分配请求，响应时间短的优先分配。如下：<br>　<img src="/img/nginx/17.png" alt=""></p>
 <p>nginx  配置实例-动静分离<br>Nginx 动静分离简单来说就是把动态跟静态请求分开，不能理解成只是单纯的把动态页面和静态页面物理分离。严格意义上说应该是动态请求跟静态请求分开，可以理解成使用 Nginx处理静态页面，Tomcat 处理动态页面。动静分离从目前实现角度来讲大致分为两种，一种是纯粹把静态文件独立成单独的域名，放在独立的服务器上，也是目前主流推崇的方案；另外一种方法就是动态跟静态文件混合在一起发布，通过 nginx 来分开。</p>
 <p>.进行 nginx 配置</p>
 <p>通过 location  指定不同的后缀名实现不同的请求转发。通过 expires  参数设置，可以使浏览器缓存过期时间，减少与服务器之前的请求和流量。具体 Expires  定义：是给一个资源设定一个过期时间，也就是说无需去 服务端验证，直接通过浏览器自身确认是否过期即可，所以不会产生额外的流量。此种方法非常适合不经常变动的资源。（如果经常更新的文件，不建议使用 Expires  来缓存），我这里设置 3d ，表示在这 3  天之内访问这个 URL ，发送一个请求，比对服务器该文件最后更新时间没有变化，则不会从服务器抓取，返回状态码 304 ，如果有修改，则直接从服务器重新下载，返回状态码 200</p>
+<p>　<img src="/img/nginx/18.png" alt=""></p>
 <p>重点是添加 location，<br>最后检查 Nginx 配置是否正确即可，然后测试动静分离是否成功，之需要删除后端 tomcat服务器上的某个静态文件，查看是否能访问，如果可以访问说明静态资源 nginx 直接返回了，不走后端 tomcat 服务器。</p>
 <p>nginx  搭建高可用集群（主从模式）</p>
+<p>　<img src="/img/nginx/19.png" alt=""></p>
 <p>1、需要什么</p>
 <p>（1 ）需要两台 nginx  服务器<br>（2 ）需要 keepalived<br>（3）需要虚拟 ip</p>
 <p>2 、配置高可用的准备工作<br>（1 ）需要两台服务器 192.168.17.156  和 192.168.17.157<br>（2 ）在两台服务器安装 nginx<br>（3 ）在两台服务器安装 keepalived<br>3 、在两台服务器安装 keepalived<br>（1 ） 使用 yum  命令进行安装<br>     yum install keepalived –y </p>
@@ -316,10 +333,13 @@
 <p>global_defs {<br>notification_email {<br><a href="mailto:acassen@firewall.loc">acassen@firewall.loc</a><br><a href="mailto:failover@firewall.loc">failover@firewall.loc</a><br><a href="mailto:sysadmin@firewall.loc">sysadmin@firewall.loc</a><br>}<br>notification_email_from <a href="mailto:Alexandre.Cassen@firewall.loc">Alexandre.Cassen@firewall.loc</a><br>smtp_server 192.168.17.156<br>smtp_connect_timeout 30<br>router_id LVS_DEVEL<br>}<br>vrrp_script chk_http_port {<br>script “/usr/local/src/nginx_check.sh”<br>interval 2 #（检测脚本执行的间隔）<br>weight 2<br>}<br>vrrp_instance VI_1 {<br>state BACKUP # 备份服务器上将 MASTER 改为 BACKUP<br>interface ens33 //网卡<br>virtual_router_id 51 # 主、备机的 virtual_router_id 必须相同<br>priority 90 # 主、备机取不同的优先级，主机值较大，备份机值较小<br>advert_int 1<br>authentication {<br>auth_type PASS<br>auth_pass 1111<br>}<br>virtual_ipaddress {<br>192.168.17.50 // VRRP H 虚拟地址<br>}<br>}<br>（2 ）在/usr/local/src 添加检测脚本</p>
 <p>#!/bin/bash<br>A=<code>ps -C nginx –no-header |wc -l</code><br>if [ $A -eq 0 ];then<br>/usr/local/nginx/sbin/nginx<br>sleep 2<br>if [ <code>ps -C nginx --no-header |wc -l</code> -eq 0 ];then<br>killall keepalived<br>fi<br>fi<br>（3 ）把两台服务器上 nginx 和 和 keepalived  启动<br>     启动 nginx ：./nginx<br>     启动 keepalived ：systemctl start keepalived.service</p>
 <p>5 、最终测试<br>（1 ）在浏览器地址栏输入  虚拟 ip  地址 192.168.17.50</p>
+<p>　<img src="/img/nginx/20.png" alt=""></p>
 <p>（2 ）把主服务器（192.168.17.129 ）nginx 和 和 keepalived  停止，再输入 192.168.17.50</p>
+<p>　<img src="/img/nginx/21.png" alt=""></p>
 <p>一样可以访问到nginx的主页面。</p>
-<p>Nginx原理<br>1 、mater 和 和 worker</p>
+<p>Nginx原理<br>1 、mater 和 和 worker<br>　<img src="/img/nginx/22.png" alt=""></p>
 <p>2 、worker  如何进行工作的</p>
+<p>　<img src="/img/nginx/23.png" alt=""></p>
 <p>3 、一个 master  和多个 woker  有好处<br>（1 ）可以使用 nginx –s reload  热部署，利用 nginx  进行热部署操作<br>（2 ）每个 woker  是独立的进程，如果有其中的一个 woker  出现问题，其他 woker  独立的，继续进行争抢，实现请求过程，不会造成服务中断<br>4 、设置多少个 woker 合适</p>
 <p>worker  数和服务器的 cpu  数相等是最为适宜的<br>5 、连接数 worker_connection<br>第一个：发送请求，占用了 woker  的几个连接数？<br>答案：2  或者 4  个<br>第二个：nginx  有一个 个 master ，有四个 woker ，每个 woker  支持最大的连接数 1024 ，支持的最大并发数是多少？<br>  普通的静态访问最大并发数是： worker_connections * worker_processes /2 ，<br>  而如果是 HTTP  作  为反向代理来说，最大并发数量应该是 worker_connections *worker_processes/4 </p>
 <p>到此为止所有总结就结束了。有哪里不足的希望有大佬指点出来。</p>
@@ -333,7 +353,7 @@
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/2019/11/11/redis/" data-toggle="tooltip" data-placement="top" title="Redis学习总结">&larr; Previous post</a>
+                            <a href="/2019/12/11/redis/" data-toggle="tooltip" data-placement="top" title="Redis学习总结">&larr; Previous post</a>
                         </li>
                     
                     
@@ -563,7 +583,7 @@
 <script>
     // only load tagcloud.js in tag.html
     if($('#tag_cloud').length !== 0){
-        async("http://yoursite.com/2019/11/10/nginx/index.html/js/jquery.tagcloud.js",function(){
+        async("http://yoursite.com/2019/12/06/nginx/index.html/js/jquery.tagcloud.js",function(){
             $.fn.tagcloud.defaults = {
                 //size: {start: 1, end: 1, unit: 'em'},
                 color: {start: '#bbbbee', end: '#0085a1'},

@@ -18,7 +18,7 @@
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/2019/11/11/redis/">
+    <link rel="canonical" href="http://yoursite.com/2019/12/11/redis/">
 
     <!-- Bootstrap Core CSS -->
 
@@ -129,7 +129,7 @@
                         <h2 class="subheading"></h2>
                         <span class="meta">
                             Posted by 尹盼 on
-                            2019-11-11
+                            2019-12-11
                         </span>
                     </div>
                 
@@ -181,7 +181,7 @@
                         
                         <li>
            
-                            <a  href="#">关于我</a>
+                            <a  href="#">工作</a>
                            
                         </li>
                         
@@ -191,6 +191,15 @@
                         <li>
            
                             <a  href="#">生活</a>
+                           
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+           
+                            <a  href="#">关于我</a>
                            
                         </li>
                         
@@ -254,9 +263,9 @@
 <p>Redis支持数据的备份，即master-slave模式的数据备份</p>
 <p>2、为什么要用 redis缓存<br>主要从“高性能”和“高并发”和“高可扩”这三点来看待这个问题。</p>
 <p>高性能：</p>
-<p>假如用户第一次访问数据库中的某些数据。这个过程会比较慢，因为是从硬盘上读取的。将该用户访问的数据存在缓存中，这样下一次再访问这些数据的时候就可以直接从缓存中获取了。操作缓存就是直接操作内存，所以速度相当快。如果数据库中的对应数据改变的之后，同步改变缓存中相应的数据即可！</p>
+<p>假如用户第一次访问数据库中的某些数据。这个过程会比较慢，因为是从硬盘上读取的。将该用户访问的数据存在缓存中，这样下一次再访问这些数据的时候就可以直接从缓存中获取了。操作缓存就是直接操作内存，所以速度相当快。如果数据库中的对应数据改变的之后，同步改变缓存中相应的数据即可！<br><img src="/img/redis/01.png" alt=""></p>
 <p>高并发：</p>
-<p>直接操作缓存能够承受的请求是远远大于直接访问数据库的，所以我们可以考虑把数据库中的部分数据转移到缓存中去，这样用户的一部分请求会直接到缓存这里而不用经过数据库。</p>
+<p>直接操作缓存能够承受的请求是远远大于直接访问数据库的，所以我们可以考虑把数据库中的部分数据转移到缓存中去，这样用户的一部分请求会直接到缓存这里而不用经过数据库。<br><img src="/img/redis/02.png" alt=""></p>
 <p>3、为什么用redis而不用memcached？<br>对于 redis 和 memcached 我总结了下面四点。现在公司一般都是用 redis 来实现缓存，而且 redis 自身也越来越强大了！</p>
 <p>redis支持更丰富的数据类型（支持更复杂的应用场景）：Redis不仅仅支持简单的k/v类型的数据，同时还提供list，set，zset，hash等数据结构的存储。memcache支持简单的数据类型，String。<br>Redis支持数据的持久化，可以将内存中的数据保持在磁盘中，重启的时候可以再次加载进行使用,而Memecache把数据全部存在内存之中。<br>集群模式：memcached没有原生的集群模式，需要依靠客户端来实现往集群中分片写入数据；但是 redis 目前是原生支持 cluster 模式的.<br>Memcached是多线程，非阻塞IO复用的网络模型；Redis使用单线程的多路 IO 复用模型。<br>4、redis 常见数据结构以及使用场景分析<br>1.String</p>
 <p>常用命令: set,get,decr,incr,mget 等。</p>
@@ -336,7 +345,7 @@
 <p>　syslog-facility local0 若启用日志记录，则需要设置日志facility，可取值范围为local0~local7，表示不同的日志级别</p>
 <p>13、databases</p>
 <p>　databases 16 设置数据库的数量，默认启动时使用DB0，使用“select <dbid>”可以更换数据库 </p>
-<p>4、SECURITY安全</p>
+<p>4、SECURITY安全<br><img src="/img/redis/03.png" alt=""></p>
 <p>5、LIMITS限制<br>　　1）、maxclients</p>
 <p>　　　　　　设置redis同时可以与多少个客户端进行连接。默认情况下为10000个客户端。当你</p>
 <p>　　　　　　无法设置进程文件句柄限制时，redis会设置为当前的文件句柄限制值减去32，因为redis会为自</p>
@@ -349,20 +358,25 @@
 <p>　　　　但是对于无内存申请的指令，仍然会正常响应，比如GET等。如果你的redis是主redis（说明你的redis有从redis），</p>
 <p>　　　　那么在设置内存使用上限时，需要在系统中留出一些内存空间给同步队列缓存，只有在你设置的是“不移除”的情况下，才不用考虑这个因素</p>
 <p>3）、maxmemory-policy</p>
-<p> 　　</p>
+<p> 　　<img src="/img/redis/04.jpg" alt=""></p>
 <p>　　4）、maxmemory-samples</p>
 <p>　　　　设置样本数量，LRU算法和最小TTL算法都并非是精确的算法，而是估算值，所以你可以设置样本的大小，</p>
 <p>　　　　redis默认会检查这么多个key并选择其中LRU的那个</p>
-<p>6、APPEND ONLY MODE追加<br>appendonly<br>appendfilename<br>Appendfsync</p>
+<p>6、APPEND ONLY MODE追加<br>appendonly<br>appendfilename<br>Appendfsync<br>　　<img src="/img/redis/05.jpg" alt=""></p>
 <p>Always：同步持久化 每次发生数据变更会被立即记录到磁盘  性能较差但数据完整性比较好<br>Everysec：出厂默认推荐，异步操作，每秒记录   如果一秒内宕机，有数据丢失<br>No<br>No-appendfsync-on-rewrite：重写时是否可以运用Appendfsync，用默认no即可，保证数据安全性。<br>Auto-aof-rewrite-min-size：设置重写的基准值<br>Auto-aof-rewrite-percentage：设置重写的基准值<br>7、SNAPSHOTTING快照<br>Save 秒钟 写操作次数</p>
+<p>　　<img src="/img/redis/06.jpg" alt=""></p>
 <p>RDB是整个内存的压缩过的Snapshot，RDB的数据结构，可以配置复合的快照触发条件，默认是1分钟内改了1万次，或5分钟内改了10次，或15分钟内改了1次。</p>
 <p>禁用</p>
+<p>　　<img src="/img/redis/07.jpg" alt=""></p>
 <p>如果想禁用RDB持久化的策略，只要不设置任何save指令，或者给save传入一个空字符串参数也可以。</p>
 <p>Stop-writes-on-bgsave-error</p>
+<p>　　<img src="/img/redis/08.jpg" alt=""></p>
 <p>如果配置成no，表示你不在乎数据不一致或者有其他的手段发现和控制。</p>
 <p>rdbcompression</p>
+<p>　　<img src="/img/redis/09.jpg" alt=""></p>
 <p>rdbcompression：对于存储到磁盘中的快照，可以设置是否进行压缩存储。如果是的话，redis会采用LZF算法进行压缩。如果你不想消耗CPU来进行压缩的话，可以设置为关闭此功能。</p>
 <p>rdbchecksum</p>
+<p>　　<img src="/img/redis/10.jpg" alt=""></p>
 <p>rdbchecksum：在存储快照后，还可以让redis使用CRC64算法来进行数据校验，但是这样做会增加大约10%的性能消耗，如果希望获取到最大的性能提升，可以关闭此功能。</p>
 <p>8、常见配置redis.conf介绍<br>参数说明<br>redis.conf 配置项说明如下：</p>
 <ol>
@@ -459,13 +473,14 @@
 <p>什么是缓存雪崩？</p>
 <p>简介：缓存同一时间大面积的失效，所以，后面的请求都会落到数据库上，造成数据库短时间内承受大量请求而崩掉。</p>
 <p>有哪些解决办法？</p>
-<p>（中华石杉老师在他的视频中提到过，视频地址在最后一个问题中有提到）：</p>
+<p>　<img src="/img/redis/11.jpg" alt=""></p>
 <p>事前：尽量保证整个 redis 集群的高可用性，发现机器宕机尽快补上。选择合适的内存淘汰策略。<br>事中：本地ehcache缓存 + hystrix限流&amp;降级，避免MySQL崩掉<br>事后：利用 redis 持久化机制保存的数据尽快恢复缓存</p>
 <p>缓存穿透</p>
 <p>什么是缓存穿透？</p>
 <p>缓存穿透说简单点就是大量请求的 key 根本不存在于缓存中，导致请求直接到了数据库上，根本没有经过缓存这一层。举个例子：某个黑客故意制造我们缓存中不存在的 key 发起大量请求，导致大量请求落到数据库。下面用图片展示一下(这两张图片不是我画的，为了省事直接在网上找的，这里说明一下)：</p>
-<p>正常缓存处理流程：</p>
+<p>正常缓存处理流程：<br>　　<img src="/img/redis/12.jpg" alt=""></p>
 <p>缓存穿透情况处理流程：</p>
+<p>　　<img src="/img/redis/13.jpg" alt=""></p>
 <p>一般MySQL 默认的最大连接数在 150 左右，这个可以通过 show variables like ‘%max_connections%’;命令来查看。最大连接数一个还只是一个指标，cpu，内存，磁盘，网络等无力条件都是其运行指标，这些指标都会限制其并发能力！所以，一般 3000 个并发请求就能打死大部分数据库了。</p>
 <p>有哪些解决办法？</p>
 <p>最基本的就是首先做好参数校验，一些不合法的参数请求直接抛出异常信息返回给客户端。比如查询的数据库 id 不能小于 0、传入的邮箱格式不对的时候直接返回错误消息给客户端等等。</p>
@@ -473,6 +488,7 @@
 <p>另外，这里多说一嘴，一般情况下我们是这样设计 key 的： 表名:列名:主键名:主键值。</p>
 <p>如果用 Java 代码展示的话，差不多是下面这样的：</p>
 <p>public Object getObjectInclNullById(Integer id) {<br>    // 从缓存中获取数据<br>    Object cacheValue = cache.get(id);<br>    // 缓存为空<br>    if (cacheValue != null) {<br>        // 从数据库中获取<br>        Object storageValue = storage.get(key);<br>        // 缓存空对象<br>        cache.set(key, storageValue);<br>        // 如果存储数据为空，需要设置一个过期时间(300秒)<br>        if (storageValue == null) {<br>            // 必须设置过期时间，否则有被攻击的风险<br>            cache.expire(key, 60 * 5);<br>        }<br>        return storageValue;<br>    }<br>    return cacheValue;<br>}<br><strong>2）布隆过滤器：</strong>布隆过滤器是一个非常神奇的数据结构，通过它我们可以非常方便地判断一个给定数据是否存在与海量数据中。我们需要的就是判断 key 是否合法，有没有感觉布隆过滤器就是我们想要找的那个“人”。具体是这样做的：把所有可能存在的请求的值都存放在布隆过滤器中，当用户请求过来，我会先判断用户发来的请求的值是否存在于布隆过滤器中。不存在的话，直接返回请求参数错误信息给客户端，存在的话才会走下面的流程。总结一下就是下面这张图(这张图片不是我画的，为了省事直接在网上找的)：</p>
+<p>　<img src="/img/redis/14.jpg" alt=""></p>
 <p>更多关于布隆过滤器的内容可以看我的这篇原创：《不了解布隆过滤器？一文给你整的明明白白！》 ，强烈推荐，个人感觉网上应该找不到总结的这么明明白白的文章了。</p>
 <p>13、如何解决 Redis 的并发竞争 Key 问题<br>所谓 Redis 的并发竞争 Key 的问题也就是多个系统同时对一个 key 进行操作，但是最后执行的顺序和我们期望的顺序不同，这样也就导致了结果的不同！</p>
 <p>推荐一种方案：分布式锁（zookeeper 和 redis 都可以实现分布式锁）。（如果不存在 Redis 的并发竞争 Key 问题，不要使用分布式锁，这样会影响性能）</p>
@@ -508,7 +524,7 @@
                     
                     
                         <li class="next">
-                            <a href="/2019/11/10/nginx/" data-toggle="tooltip" data-placement="top" title="Nginx学习总结">Next post &rarr;</a>
+                            <a href="/2019/12/06/nginx/" data-toggle="tooltip" data-placement="top" title="Nginx学习总结">Next post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -733,7 +749,7 @@
 <script>
     // only load tagcloud.js in tag.html
     if($('#tag_cloud').length !== 0){
-        async("http://yoursite.com/2019/11/11/redis/index.html/js/jquery.tagcloud.js",function(){
+        async("http://yoursite.com/2019/12/11/redis/index.html/js/jquery.tagcloud.js",function(){
             $.fn.tagcloud.defaults = {
                 //size: {start: 1, end: 1, unit: 'em'},
                 color: {start: '#bbbbee', end: '#0085a1'},
