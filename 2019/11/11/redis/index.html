@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          Redis学习总结 - null
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2019/11/11/redis/">
+
+    <!-- Bootstrap Core CSS -->
+
+   
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.4.1/css/bootstrap.min.css">
+
+
+    
+
+    <!-- Custom CSS --> 
+    
+<link rel="stylesheet" href="/css/beantech.min.css">
+
+
+    
+<link rel="stylesheet" href="/css/donate.css">
+
+	
+<link rel="stylesheet" href="/css/w3.css">
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    
+<link rel="stylesheet" href="/css/widget.css">
+
+
+    
+<link rel="stylesheet" href="/css/rocket.css">
+
+
+    
+<link rel="stylesheet" href="/css/signature.css">
+
+
+    
+<link rel="stylesheet" href="/css/toc.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 4.1.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+    }
+   .post-heading{
+    padding:20px;
+    }
+  .person {
+    border: 10px solid transparent;
+    margin-bottom: 25px;
+    width: 80%;
+    height: 80%;
+    opacity: 0.7;
+  }
+  .person:hover {
+    border-color: #f1f1f1;
+  }
+
+</style>
+
+<header id="headerid" class="w3-indigo intro-header" style="position:relative;">
+    <!-- Signature -->
+	
+        <div class="container">
+            <div class=" row" >
+			
+			<canvas id="particles-js-canvas" style="position:absolute;z-index:1;top:0px;left:0px;" width="100%" height="50%"></canvas>
+			
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1" style="z-index:2;">
+                
+                    <div class="post-heading" style="padding:40px">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#redis" title="redis">redis</a>
+                            
+                        </div>
+                        <h1>Redis学习总结</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by 尹盼 on
+                            2019-11-11
+                        </span>
+                    </div>
+                
+                </div>
+            </div>
+        </div>
+  
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">尹盼个人博客</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a  href="/">Homepage</a>
+                    </li>
+		    
+                    
+
+                        
+                        <li>
+           
+                            <a  href="#">文章</a>
+                           
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+           
+                            <a  href="#">关于我</a>
+                           
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+           
+                            <a  href="#">生活</a>
+                           
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>编辑 展开<br>Redis 简介<br> redis官网：<a href="http://redis.io/" target="_blank" rel="noopener">http://redis.io/</a></p>
+<p>1、什么是redis?<br>简单来说 redis 就是一个数据库 全名：Redis:REmote DIctionary Server(远程字典服务器)，不过与传统数据库不同的是 redis 的数据是存在内存中的，所以读写速度非常快，因此 redis 被广泛应用于缓存方向。另外，redis 也经常用来做分布式锁。redis 提供了多种数据类型来支持不同的业务场景。除此之外，redis 支持事务 、持久化、LUA脚本、LRU驱动事件、多种集群方案。是一个高性能的key-value数据库。</p>
+<p>Redis支持数据的持久化，可以将内存中的数据保持在磁盘中，重启的时候可以再次加载进行使用。</p>
+<p>Redis不仅仅支持简单的key-value类型的数据，同时还提供list，set，zset，hash等数据结构的存储。</p>
+<p>Redis支持数据的备份，即master-slave模式的数据备份</p>
+<p>2、为什么要用 redis缓存<br>主要从“高性能”和“高并发”和“高可扩”这三点来看待这个问题。</p>
+<p>高性能：</p>
+<p>假如用户第一次访问数据库中的某些数据。这个过程会比较慢，因为是从硬盘上读取的。将该用户访问的数据存在缓存中，这样下一次再访问这些数据的时候就可以直接从缓存中获取了。操作缓存就是直接操作内存，所以速度相当快。如果数据库中的对应数据改变的之后，同步改变缓存中相应的数据即可！</p>
+<p>高并发：</p>
+<p>直接操作缓存能够承受的请求是远远大于直接访问数据库的，所以我们可以考虑把数据库中的部分数据转移到缓存中去，这样用户的一部分请求会直接到缓存这里而不用经过数据库。</p>
+<p>3、为什么用redis而不用memcached？<br>对于 redis 和 memcached 我总结了下面四点。现在公司一般都是用 redis 来实现缓存，而且 redis 自身也越来越强大了！</p>
+<p>redis支持更丰富的数据类型（支持更复杂的应用场景）：Redis不仅仅支持简单的k/v类型的数据，同时还提供list，set，zset，hash等数据结构的存储。memcache支持简单的数据类型，String。<br>Redis支持数据的持久化，可以将内存中的数据保持在磁盘中，重启的时候可以再次加载进行使用,而Memecache把数据全部存在内存之中。<br>集群模式：memcached没有原生的集群模式，需要依靠客户端来实现往集群中分片写入数据；但是 redis 目前是原生支持 cluster 模式的.<br>Memcached是多线程，非阻塞IO复用的网络模型；Redis使用单线程的多路 IO 复用模型。<br>4、redis 常见数据结构以及使用场景分析<br>1.String</p>
+<p>常用命令: set,get,decr,incr,mget 等。</p>
+<p>String数据结构是简单的key-value类型，value其实不仅可以是String，也可以是数字。 常规key-value缓存应用； 常规计数：微博数，粉丝数等。</p>
+<p>2.Hash</p>
+<p>常用命令： hget,hset,hgetall 等。</p>
+<p>hash 是一个 string 类型的 field 和 value 的映射表，hash 特别适合用于存储对象，后续操作的时候，你可以直接仅仅修改这个对象中的某个字段的值。 比如我们可以 hash 数据结构来存储用户信息，商品信息等等。比如下面我就用 hash 类型存放了我本人的一些信息：</p>
+<p>key=JavaUser293847<br>value={<br>  “id”: 1,<br>  “name”: “SnailClimb”,<br>  “age”: 22,<br>  “location”: “Wuhan, Hubei”<br>}</p>
+<p>3.List</p>
+<p>常用命令: lpush,rpush,lpop,rpop,lrange等</p>
+<p>list 就是链表，Redis list 的应用场景非常多，也是Redis最重要的数据结构之一，比如微博的关注列表，粉丝列表，消息列表等功能都可以用Redis的 list 结构来实现。</p>
+<p>Redis list 的实现为一个双向链表，即可以支持反向查找和遍历，更方便操作，不过带来了部分额外的内存开销。</p>
+<p>另外可以通过 lrange 命令，就是从某个元素开始读取多少个元素，可以基于 list 实现分页查询，这个很棒的一个功能，基于 redis 实现简单的高性能分页，可以做类似微博那种下拉不断分页的东西（一页一页的往下走），性能高。</p>
+<p>4.Set</p>
+<p>常用命令： sadd,spop,smembers,sunion 等</p>
+<p>set 对外提供的功能与list类似是一个列表的功能，特殊之处在于 set 是可以自动排重的。</p>
+<p>当你需要存储一个列表数据，又不希望出现重复数据时，set是一个很好的选择，并且set提供了判断某个成员是否在一个set集合内的重要接口，这个也是list所不能提供的。可以基于 set 轻易实现交集、并集、差集的操作。</p>
+<p>比如：在微博应用中，可以将一个用户所有的关注人存在一个集合中，将其所有粉丝存在一个集合。Redis可以非常方便的实现如共同关注、共同粉丝、共同喜好等功能。这个过程也就是求交集的过程，具体命令如下：</p>
+<p>sinterstore key1 key2 key3     将交集存在key1内<br>5.Sorted Set</p>
+<p>常用命令： zadd,zrange,zrem,zcard等</p>
+<p>和set相比，sorted set增加了一个权重参数score，使得集合中的元素能够按score进行有序排列。</p>
+<p>举例： 在直播系统中，实时排行信息包含直播间在线用户列表，各种礼物排行榜，弹幕消息（可以理解为按消息维度的消息排行榜）等信息，适合使用 Redis 中的 Sorted Set 结构进行存储。</p>
+<p>5、redis安装<br>Windows版安装</p>
+<p>Window 下安装<br>下载地址：<a href="https://github.com/dmajkic/redis/downloads" target="_blank" rel="noopener">https://github.com/dmajkic/redis/downloads</a><br>下载到的Redis支持32bit和64bit。根据自己实际情况选择，将64bit的内容cp到自定义盘符安装目录取名redis。 如 C:\reids<br>打开一个cmd窗口 使用cd命令切换目录到 C:\redis 运行 redis-server.exe redis.conf 。<br>如果想方便的话，可以把redis的路径加到系统的环境变量里，这样就省得再输路径了，后面的那个redis.conf可以省略，<br>如果省略，会启用默认的。</p>
+<p>这时候另启一个cmd窗口，原来的不要关闭，不然就无法访问服务端了。<br>切换到redis目录下运行 redis-cli.exe -h 127.0.0.1 -p 6379 。<br>设置键值对 set myKey abc<br>取出键值对 get myKey</p>
+<p>由于企业里面做Redis开发，99%都是Linux版的运用和安装，<br>几乎不会涉及到Windows版，上一步的讲解只是为了知识的完整性，<br>Windows版不作为重点，同学可以下去自己玩，企业实战就认一个版：Linux</p>
+<p>Linux版安装</p>
+<p>下载获得redis-3.0.4.tar.gz后将它放入我们的Linux目录/opt</p>
+<p>在/opt目录下，解压命令:tar -zxvf redis-3.0.4.tar.gz</p>
+<p>解压完成后出现文件夹：redis-3.0.4    进入目录:cd redis-3.0.4</p>
+<p>在redis-3.0.4目录下执行make命令</p>
+<p>如果make完成后继续执行make install</p>
+<p>注意：运行make命令时故意出现的错误解析：</p>
+<p>1、安装gcc：yum install gcc-c++</p>
+<p>2、二次make</p>
+<p>3、jemalloc/jemalloc.h：没有那个文件或目录</p>
+<p>查看默认安装目录：usr/local/bin</p>
+<p>修改redis.conf文件将里面的daemonize no 改成 yes，让服务在后台启动</p>
+<p>将默认的redis.conf拷贝到自己定义好的一个路径下，比如/myconf</p>
+<p>/usr/local/bin目录下运行redis-server，运行拷贝出存放了自定义conf文件目录下的redis.conf文件</p>
+<p>单实例关闭：redis-cli shutdown</p>
+<p>多实例关闭，指定端口关闭 如:redis-cli -p 6379 shutdown</p>
+<p>6、redis 设置过期时间<br>Redis中有个设置时间过期的功能，即对存储在 redis 数据库中的值可以设置一个过期时间。作为一个缓存数据库，这是非常实用的。如我们一般项目中的 token 或者一些登录信息，尤其是短信验证码都是有时间限制的，按照传统的数据库处理方式，一般都是自己判断过期，这样无疑会严重影响项目性能。</p>
+<p>我们 set key 的时候，都可以给一个 expire time，就是过期时间，通过过期时间我们可以指定这个 key 可以存活的时间。</p>
+<p>如果假设你设置了一批 key 只能存活1个小时，那么接下来1小时后，redis是怎么对这批key进行删除的？</p>
+<p>定期删除+惰性删除。</p>
+<p>通过名字大概就能猜出这两个删除方式的意思了。</p>
+<p>定期删除：redis默认是每隔 100ms 就随机抽取一些设置了过期时间的key，检查其是否过期，如果过期就删除。注意这里是随机抽取的。为什么要随机呢？你想一想假如 redis 存了几十万个 key ，每隔100ms就遍历所有的设置过期时间的 key 的话，就会给 CPU 带来很大的负载！<br>惰性删除 ：定期删除可能会导致很多过期 key 到了时间并没有被删除掉。所以就有了惰性删除。假如你的过期 key，靠定期删除没有被删除掉，还停留在内存里，除非你的系统去查一下那个 key，才会被redis给删除掉。这就是所谓的惰性删除，也是够懒的哈！<br>但是仅仅通过设置过期时间还是有问题的。我们想一下：如果定期删除漏掉了很多过期 key，然后你也没及时去查，也就没走惰性删除，此时会怎么样？如果大量过期key堆积在内存里，导致redis内存块耗尽了。怎么解决这个问题呢？ redis 内存淘汰机制。</p>
+<p>7、解析配置文件redis.conf<br>1、units单位</p>
+<p>配置大小单位,开头定义了一些基本的度量单位，只支持bytes，不支持bit<br>对大小写不敏感 </p>
+<p>2、INCLUDES包含</p>
+<p>和我们的Struts2配置文件类似，可以通过includes包含，redis.conf可以作为总闸，包含其他</p>
+<p>3、GENERAL通用</p>
+<p>1、daemonize </p>
+<p>　daemonize yes 启用后台守护进程运行模式</p>
+<p>2、pidfile</p>
+<p>　pidfile /var/run/redis.pid redis启动后的进程ID保存文件</p>
+<p>3、port</p>
+<p>　port 6379 指定使用的端口号</p>
+<p>4、tcp-backlog</p>
+<p>　设置tcp的backlog，backlog其实是一个连接队列，backlog队列总和=未完成三次握手队列 + 已经完成三次握手队列在高并发 环  境下你需要一个高backlog值来避免慢客户端连接问题。注意Linux内核会将这个值减小到/proc/sys/net/core/somaxconn的值，所以需要确认增大somaxconn和tcp_max_syn_backlog两个值 来达到想要的效果</p>
+<p>5、bind</p>
+<p>　bind IP 监听指定的网络接口</p>
+<p>6、timeout</p>
+<p>　timeout N 客户端空闲N秒后断开连接，参数0表示不启用</p>
+<p>7、tcp-keepalive</p>
+<p>　tcp-keepalive 0 指定ACKs的时间周期，单位为秒，如果设置为0，则不会进行Keepalive检测，建议设置成60 </p>
+<p>8、loglevel</p>
+<p>　loglevel notice 指定服务器信息显示的等级（日志级别），4个参数分别为debug\verbose\notice\warning</p>
+<p>9、logfile</p>
+<p>　logfile “” 指定日志文件，默认是使用系统的标准输出</p>
+<p>10、syslog-enabled</p>
+<p>　syslog-enabled no 是否启用将记录记载到系统日志功能，默认为不启用</p>
+<p>11、syslog-ident</p>
+<p>　syslog-ident redis 若启用日志记录，则需要设置日志记录的身份</p>
+<p>12、syslog-facility</p>
+<p>　syslog-facility local0 若启用日志记录，则需要设置日志facility，可取值范围为local0~local7，表示不同的日志级别</p>
+<p>13、databases</p>
+<p>　databases 16 设置数据库的数量，默认启动时使用DB0，使用“select <dbid>”可以更换数据库 </p>
+<p>4、SECURITY安全</p>
+<p>5、LIMITS限制<br>　　1）、maxclients</p>
+<p>　　　　　　设置redis同时可以与多少个客户端进行连接。默认情况下为10000个客户端。当你</p>
+<p>　　　　　　无法设置进程文件句柄限制时，redis会设置为当前的文件句柄限制值减去32，因为redis会为自</p>
+<p>　　　　　　身内部处理逻辑留一些句柄出来。如果达到了此限制，redis则会拒绝新的连接请求，并且向这</p>
+<p>　　　　　　些连接请求方发出“max number of clients reached”以作回应。</p>
+<p> 　　2）、maxmemory</p>
+<p>　　　　设置redis可以使用的内存量。一旦到达内存使用上限，redis将会试图移除内部数据，移除规则可以通过maxmemory-policy来指定。</p>
+<p>　　　　如果redis无法根据移除规则来移除内存中的数据，或者设置了“不允许移除”，</p>
+<p>　　　　那么redis则会针对那些需要申请内存的指令返回错误信息，比如SET、LPUSH等。</p>
+<p>　　　　但是对于无内存申请的指令，仍然会正常响应，比如GET等。如果你的redis是主redis（说明你的redis有从redis），</p>
+<p>　　　　那么在设置内存使用上限时，需要在系统中留出一些内存空间给同步队列缓存，只有在你设置的是“不移除”的情况下，才不用考虑这个因素</p>
+<p>3）、maxmemory-policy</p>
+<p> 　　</p>
+<p>　　4）、maxmemory-samples</p>
+<p>　　　　设置样本数量，LRU算法和最小TTL算法都并非是精确的算法，而是估算值，所以你可以设置样本的大小，</p>
+<p>　　　　redis默认会检查这么多个key并选择其中LRU的那个</p>
+<p>6、APPEND ONLY MODE追加<br>appendonly<br>appendfilename<br>Appendfsync</p>
+<p>Always：同步持久化 每次发生数据变更会被立即记录到磁盘  性能较差但数据完整性比较好<br>Everysec：出厂默认推荐，异步操作，每秒记录   如果一秒内宕机，有数据丢失<br>No<br>No-appendfsync-on-rewrite：重写时是否可以运用Appendfsync，用默认no即可，保证数据安全性。<br>Auto-aof-rewrite-min-size：设置重写的基准值<br>Auto-aof-rewrite-percentage：设置重写的基准值<br>7、SNAPSHOTTING快照<br>Save 秒钟 写操作次数</p>
+<p>RDB是整个内存的压缩过的Snapshot，RDB的数据结构，可以配置复合的快照触发条件，默认是1分钟内改了1万次，或5分钟内改了10次，或15分钟内改了1次。</p>
+<p>禁用</p>
+<p>如果想禁用RDB持久化的策略，只要不设置任何save指令，或者给save传入一个空字符串参数也可以。</p>
+<p>Stop-writes-on-bgsave-error</p>
+<p>如果配置成no，表示你不在乎数据不一致或者有其他的手段发现和控制。</p>
+<p>rdbcompression</p>
+<p>rdbcompression：对于存储到磁盘中的快照，可以设置是否进行压缩存储。如果是的话，redis会采用LZF算法进行压缩。如果你不想消耗CPU来进行压缩的话，可以设置为关闭此功能。</p>
+<p>rdbchecksum</p>
+<p>rdbchecksum：在存储快照后，还可以让redis使用CRC64算法来进行数据校验，但是这样做会增加大约10%的性能消耗，如果希望获取到最大的性能提升，可以关闭此功能。</p>
+<p>8、常见配置redis.conf介绍<br>参数说明<br>redis.conf 配置项说明如下：</p>
+<ol>
+<li><p>Redis默认不是以守护进程的方式运行，可以通过该配置项修改，使用yes启用守护进程<br>daemonize no</p>
+</li>
+<li><p>当Redis以守护进程方式运行时，Redis默认会把pid写入/var/run/redis.pid文件，可以通过pidfile指定<br>pidfile /var/run/redis.pid</p>
+</li>
+<li><p>指定Redis监听端口，默认端口为6379，作者在自己的一篇博文中解释了为什么选用6379作为默认端口，因为6379在手机按键上MERZ对应的号码，而MERZ取自意大利歌女Alessia Merz的名字<br>port 6379</p>
+</li>
+<li><p>绑定的主机地址<br>bind 127.0.0.1</p>
+</li>
+<li><p>当 客户端闲置多长时间后关闭连接，如果指定为0，表示关闭该功能<br>timeout 300</p>
+</li>
+<li><p>指定日志记录级别，Redis总共支持四个级别：debug、verbose、notice、warning，默认为verbose<br>loglevel verbose</p>
+</li>
+<li><p>日志记录方式，默认为标准输出，如果配置Redis为守护进程方式运行，而这里又配置为日志记录方式为标准输出，则日志将会发送给/dev/null<br>logfile stdout</p>
+</li>
+<li><p>设置数据库的数量，默认数据库为0，可以使用SELECT <dbid>命令在连接上指定数据库id<br>databases 16</p>
+</li>
+<li><p>指定在多长时间内，有多少次更新操作，就将数据同步到数据文件，可以多个条件配合<br>save <seconds> <changes><br>Redis默认配置文件中提供了三个条件：<br>save 900 1<br>save 300 10<br>save 60 10000<br>分别表示900秒（15分钟）内有1个更改，300秒（5分钟）内有10个更改以及60秒内有10000个更改。</p>
+</li>
+<li><p>指定存储至本地数据库时是否压缩数据，默认为yes，Redis采用LZF压缩，如果为了节省CPU时间，可以关闭该选项，但会导致数据库文件变的巨大<br>rdbcompression yes</p>
+</li>
+<li><p>指定本地数据库文件名，默认值为dump.rdb<br>dbfilename dump.rdb</p>
+</li>
+<li><p>指定本地数据库存放目录<br>dir ./</p>
+</li>
+<li><p>设置当本机为slav服务时，设置master服务的IP地址及端口，在Redis启动时，它会自动从master进行数据同步<br>slaveof <masterip> <masterport></p>
+</li>
+<li><p>当master服务设置了密码保护时，slav服务连接master的密码<br>masterauth <master-password></p>
+</li>
+<li><p>设置Redis连接密码，如果配置了连接密码，客户端在连接Redis时需要通过AUTH <password>命令提供密码，默认关闭<br>requirepass foobared</p>
+</li>
+<li><p>设置同一时间最大客户端连接数，默认无限制，Redis可以同时打开的客户端连接数为Redis进程可以打开的最大文件描述符数，如果设置 maxclients 0，表示不作限制。当客户端连接数到达限制时，Redis会关闭新的连接并向客户端返回max number of clients reached错误信息<br>maxclients 128</p>
+</li>
+<li><p>指定Redis最大内存限制，Redis在启动时会把数据加载到内存中，达到最大内存后，Redis会先尝试清除已到期或即将到期的Key，当此方法处理 后，仍然到达最大内存设置，将无法再进行写入操作，但仍然可以进行读取操作。Redis新的vm机制，会把Key存放内存，Value会存放在swap区<br>maxmemory <bytes></p>
+</li>
+<li><p>指定是否在每次更新操作后进行日志记录，Redis在默认情况下是异步的把数据写入磁盘，如果不开启，可能会在断电时导致一段时间内的数据丢失。因为 redis本身同步数据文件是按上面save条件来同步的，所以有的数据会在一段时间内只存在于内存中。默认为no<br>appendonly no</p>
+</li>
+<li><p>指定更新日志文件名，默认为appendonly.aof<br>appendfilename appendonly.aof</p>
+</li>
+<li><p>指定更新日志条件，共有3个可选值：<br>no：表示等操作系统进行数据缓存同步到磁盘（快）<br>always：表示每次更新操作后手动调用fsync()将数据写到磁盘（慢，安全）<br>everysec：表示每秒同步一次（折衷，默认值）<br>appendfsync everysec</p>
+</li>
+<li><p>指定是否启用虚拟内存机制，默认值为no，简单的介绍一下，VM机制将数据分页存放，由Redis将访问量较少的页即冷数据swap到磁盘上，访问多的页面由磁盘自动换出到内存中（在后面的文章我会仔细分析Redis的VM机制）<br>vm-enabled no</p>
+</li>
+<li><p>虚拟内存文件路径，默认值为/tmp/redis.swap，不可多个Redis实例共享<br>vm-swap-file /tmp/redis.swap</p>
+</li>
+<li><p>将所有大于vm-max-memory的数据存入虚拟内存,无论vm-max-memory设置多小,所有索引数据都是内存存储的(Redis的索引数据 就是keys),也就是说,当vm-max-memory设置为0的时候,其实是所有value都存在于磁盘。默认值为0<br>vm-max-memory 0</p>
+</li>
+<li><p>Redis swap文件分成了很多的page，一个对象可以保存在多个page上面，但一个page上不能被多个对象共享，vm-page-size是要根据存储的 数据大小来设定的，作者建议如果存储很多小对象，page大小最好设置为32或者64bytes；如果存储很大大对象，则可以使用更大的page，如果不 确定，就使用默认值<br>vm-page-size 32</p>
+</li>
+<li><p>设置swap文件中的page数量，由于页表（一种表示页面空闲或使用的bitmap）是在放在内存中的，，在磁盘上每8个pages将消耗1byte的内存。<br>vm-pages 134217728</p>
+</li>
+<li><p>设置访问swap文件的线程数,最好不要超过机器的核数,如果设置为0,那么所有对swap文件的操作都是串行的，可能会造成比较长时间的延迟。默认值为4<br>vm-max-threads 4</p>
+</li>
+<li><p>设置在向客户端应答时，是否把较小的包合并为一个包发送，默认为开启<br>glueoutputbuf yes</p>
+</li>
+<li><p>指定在超过一定的数量或者最大的元素超过某一临界值时，采用一种特殊的哈希算法<br>hash-max-zipmap-entries 64<br>hash-max-zipmap-value 512</p>
+</li>
+<li><p>指定是否激活重置哈希，默认为开启（后面在介绍Redis的哈希算法时具体介绍）<br>activerehashing yes</p>
+</li>
+<li><p>指定包含其它的配置文件，可以在同一主机上多个Redis实例之间使用同一份配置文件，而同时各个实例又拥有自己的特定配置文件include /path/to/local.conf</p>
+</li>
+</ol>
+<p>9、Redis持久化<br>很多时候我们需要持久化数据也就是将内存中的数据写入到硬盘里面，大部分原因是为了之后重用数据（比如重启机器、机器故障之后恢复数据），或者是为了防止系统故障而将数据备份到一个远程位置。</p>
+<p>Redis不同于Memcached的很重一点就是，Redis支持持久化，而且支持两种不同的持久化操作。Redis的一种持久化方式叫快照（snapshotting，RDB），另一种方式是只追加文件（append-only file,AOF）。这两种方法各有千秋，下面我会详细这两种持久化方法是什么，怎么用，如何选择适合自己的持久化方法。</p>
+<p>快照（snapshotting）持久化（RDB）</p>
+<p>Redis可以通过创建快照来获得存储在内存里面的数据在某个时间点上的副本。Redis创建快照之后，可以对快照进行备份，可以将快照复制到其他服务器从而创建具有相同数据的服务器副本（Redis主从结构，主要用来提高Redis性能），还可以将快照留在原地以便重启服务器的时候使用。</p>
+<p>快照持久化是Redis默认采用的持久化方式，在redis.conf配置文件中默认有此下配置：</p>
+<p>save 900 1           #在900秒(15分钟)之后，如果至少有1个key发生变化，Redis就会自动触发BGSAVE命令创建快照。</p>
+<p>save 300 10          #在300秒(5分钟)之后，如果至少有10个key发生变化，Redis就会自动触发BGSAVE命令创建快照。</p>
+<p>save 60 10000        #在60秒(1分钟)之后，如果至少有10000个key发生变化，Redis就会自动触发BGSAVE命令创建快照。<br>AOF（append-only file）持久化</p>
+<p>与快照持久化相比，AOF持久化 的实时性更好，因此已成为主流的持久化方案。默认情况下Redis没有开启AOF（append only file）方式的持久化，可以通过appendonly参数开启：</p>
+<p>appendonly yes<br>开启AOF持久化后每执行一条会更改Redis中的数据的命令，Redis就会将该命令写入硬盘中的AOF文件。AOF文件的保存位置和RDB文件的位置相同，都是通过dir参数设置的，默认的文件名是appendonly.aof。</p>
+<p>在Redis的配置文件中存在三种不同的 AOF 持久化方式，它们分别是：</p>
+<p>appendfsync always    #每次有数据修改发生时都会写入AOF文件,这样会严重降低Redis的速度<br>appendfsync everysec  #每秒钟同步一次，显示地将多个写命令同步到硬盘<br>appendfsync no        #让操作系统决定何时进行同步<br>为了兼顾数据和写入性能，用户可以考虑 appendfsync everysec选项 ，让Redis每秒同步一次AOF文件，Redis性能几乎没受到任何影响。而且这样即使出现系统崩溃，用户最多只会丢失一秒之内产生的数据。当硬盘忙于执行写入操作的时候，Redis还会优雅的放慢自己的速度以便适应硬盘的最大写入速度。</p>
+<p>Redis 4.0 对于持久化机制的优化</p>
+<p>Redis 4.0 开始支持 RDB 和 AOF 的混合持久化（默认关闭，可以通过配置项 aof-use-rdb-preamble 开启）。</p>
+<p>如果把混合持久化打开，AOF 重写的时候就直接把 RDB 的内容写到 AOF 文件开头。这样做的好处是可以结合 RDB 和 AOF 的优点, 快速加载同时避免丢失过多的数据。当然缺点也是有的， AOF 里面的 RDB 部分是压缩格式不再是 AOF 格式，可读性较差。</p>
+<p>补充内容：AOF 重写</p>
+<p>AOF重写可以产生一个新的AOF文件，这个新的AOF文件和原有的AOF文件所保存的数据库状态一样，但体积更小。</p>
+<p>AOF重写是一个有歧义的名字，该功能是通过读取数据库中的键值对来实现的，程序无须对现有AOF文件进行任何读入、分析或者写入操作。</p>
+<p>在执行 BGREWRITEAOF 命令时，Redis 服务器会维护一个 AOF 重写缓冲区，该缓冲区会在子进程创建新AOF文件期间，记录服务器执行的所有写命令。当子进程完成创建新AOF文件的工作之后，服务器会将重写缓冲区中的所有内容追加到新AOF文件的末尾，使得新旧两个AOF文件所保存的数据库状态一致。最后，服务器用新的AOF文件替换旧的AOF文件，以此来完成AOF文件重写操作</p>
+<p>10、redis 内存淘汰机制<br>假如MySQL里有2000w数据，Redis中只存20w的数据，如何保证Redis中的数据都是热点数据?</p>
+<p>redis 提供 6种数据淘汰策略：</p>
+<p>volatile-lru：从已设置过期时间的数据集（server.db[i].expires）中挑选最近最少使用的数据淘汰<br>volatile-ttl：从已设置过期时间的数据集（server.db[i].expires）中挑选将要过期的数据淘汰<br>volatile-random：从已设置过期时间的数据集（server.db[i].expires）中任意选择数据淘汰<br>allkeys-lru：当内存不足以容纳新写入数据时，在键空间中，移除最近最少使用的key（这个是最常用的）<br>allkeys-random：从数据集（server.db[i].dict）中任意选择数据淘汰<br>no-eviction：禁止驱逐数据，也就是说当内存不足以容纳新写入数据时，新写入操作会报错。这个应该没人使用吧！<br>4.0版本后增加以下两种：</p>
+<p>volatile-lfu：从已设置过期时间的数据集(server.db[i].expires)中挑选最不经常使用的数据淘汰<br>allkeys-lfu：当内存不足以容纳新写入数据时，在键空间中，移除最不经常使用的key<br>11、redis 事务<br>Redis 通过 MULTI、EXEC、WATCH 等命令来实现事务(transaction)功能。事务提供了一种将多个命令请求打包，然后一次性、按顺序地执行多个命令的机制，并且在事务执行期间，服务器不会中断事务而改去执行其他客户端的命令请求，它会将事务中的所有命令都执行完毕，然后才去处理其他客户端的命令请求。</p>
+<p>在传统的关系式数据库中，常常用 ACID 性质来检验事务功能的可靠性和安全性。在 Redis 中，事务总是具有原子性（Atomicity）、一致性（Consistency）和隔离性（Isolation），并且当 Redis 运行在某种特定的持久化模式下时，事务也具有持久性（Durability）。</p>
+<p>注意：</p>
+<p>redis同一个事务中如果有一条命令执行失败，其后的命令仍然会被执行，没有回滚</p>
+<p>单独的隔离操作：事务中的所有命令都会序列化、按顺序地执行。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断。</p>
+<p>没有隔离级别的概念：队列中的命令没有提交之前都不会实际的被执行，因为事务提交前任何指令都不会被实际执行，也就不存在”事务内的查询要看到事务里的更新，在事务外查询不能看到”这个让人万分头痛的问题</p>
+<p>12、缓存雪崩和缓存穿透问题解决方案<br>缓存雪崩</p>
+<p>什么是缓存雪崩？</p>
+<p>简介：缓存同一时间大面积的失效，所以，后面的请求都会落到数据库上，造成数据库短时间内承受大量请求而崩掉。</p>
+<p>有哪些解决办法？</p>
+<p>（中华石杉老师在他的视频中提到过，视频地址在最后一个问题中有提到）：</p>
+<p>事前：尽量保证整个 redis 集群的高可用性，发现机器宕机尽快补上。选择合适的内存淘汰策略。<br>事中：本地ehcache缓存 + hystrix限流&amp;降级，避免MySQL崩掉<br>事后：利用 redis 持久化机制保存的数据尽快恢复缓存</p>
+<p>缓存穿透</p>
+<p>什么是缓存穿透？</p>
+<p>缓存穿透说简单点就是大量请求的 key 根本不存在于缓存中，导致请求直接到了数据库上，根本没有经过缓存这一层。举个例子：某个黑客故意制造我们缓存中不存在的 key 发起大量请求，导致大量请求落到数据库。下面用图片展示一下(这两张图片不是我画的，为了省事直接在网上找的，这里说明一下)：</p>
+<p>正常缓存处理流程：</p>
+<p>缓存穿透情况处理流程：</p>
+<p>一般MySQL 默认的最大连接数在 150 左右，这个可以通过 show variables like ‘%max_connections%’;命令来查看。最大连接数一个还只是一个指标，cpu，内存，磁盘，网络等无力条件都是其运行指标，这些指标都会限制其并发能力！所以，一般 3000 个并发请求就能打死大部分数据库了。</p>
+<p>有哪些解决办法？</p>
+<p>最基本的就是首先做好参数校验，一些不合法的参数请求直接抛出异常信息返回给客户端。比如查询的数据库 id 不能小于 0、传入的邮箱格式不对的时候直接返回错误消息给客户端等等。</p>
+<p>1）缓存无效 key : 如果缓存和数据库都查不到某个 key 的数据就写一个到 redis 中去并设置过期时间，具体命令如下：SET key value EX 10086。这种方式可以解决请求的 key 变化不频繁的情况，如何黑客恶意攻击，每次构建的不同的请求key，会导致 redis 中缓存大量无效的 key 。很明显，这种方案并不能从根本上解决此问题。如果非要用这种方式来解决穿透问题的话，尽量将无效的 key 的过期时间设置短一点比如 1 分钟。</p>
+<p>另外，这里多说一嘴，一般情况下我们是这样设计 key 的： 表名:列名:主键名:主键值。</p>
+<p>如果用 Java 代码展示的话，差不多是下面这样的：</p>
+<p>public Object getObjectInclNullById(Integer id) {<br>    // 从缓存中获取数据<br>    Object cacheValue = cache.get(id);<br>    // 缓存为空<br>    if (cacheValue != null) {<br>        // 从数据库中获取<br>        Object storageValue = storage.get(key);<br>        // 缓存空对象<br>        cache.set(key, storageValue);<br>        // 如果存储数据为空，需要设置一个过期时间(300秒)<br>        if (storageValue == null) {<br>            // 必须设置过期时间，否则有被攻击的风险<br>            cache.expire(key, 60 * 5);<br>        }<br>        return storageValue;<br>    }<br>    return cacheValue;<br>}<br><strong>2）布隆过滤器：</strong>布隆过滤器是一个非常神奇的数据结构，通过它我们可以非常方便地判断一个给定数据是否存在与海量数据中。我们需要的就是判断 key 是否合法，有没有感觉布隆过滤器就是我们想要找的那个“人”。具体是这样做的：把所有可能存在的请求的值都存放在布隆过滤器中，当用户请求过来，我会先判断用户发来的请求的值是否存在于布隆过滤器中。不存在的话，直接返回请求参数错误信息给客户端，存在的话才会走下面的流程。总结一下就是下面这张图(这张图片不是我画的，为了省事直接在网上找的)：</p>
+<p>更多关于布隆过滤器的内容可以看我的这篇原创：《不了解布隆过滤器？一文给你整的明明白白！》 ，强烈推荐，个人感觉网上应该找不到总结的这么明明白白的文章了。</p>
+<p>13、如何解决 Redis 的并发竞争 Key 问题<br>所谓 Redis 的并发竞争 Key 的问题也就是多个系统同时对一个 key 进行操作，但是最后执行的顺序和我们期望的顺序不同，这样也就导致了结果的不同！</p>
+<p>推荐一种方案：分布式锁（zookeeper 和 redis 都可以实现分布式锁）。（如果不存在 Redis 的并发竞争 Key 问题，不要使用分布式锁，这样会影响性能）</p>
+<p>基于zookeeper临时有序节点可以实现的分布式锁。大致思想为：每个客户端对某个方法加锁时，在zookeeper上的与该方法对应的指定节点的目录下，生成一个唯一的瞬时有序节点。 判断是否获取锁的方式很简单，只需要判断有序节点中序号最小的一个。 当释放锁的时候，只需将这个瞬时节点删除即可。同时，其可以避免服务宕机导致的锁无法释放，而产生的死锁问题。完成业务流程后，删除对应的子节点释放锁。</p>
+<p>14、Redis的主从复制(Master/Slave)<br>复制模式</p>
+<p>全量复制：Master 全部同步到 Slave<br>增量复制：Slave 数据丢失进行备份<br>复制原理</p>
+<p>1、slave启动成功连接到master后会发送一个sync命令</p>
+<p>2、Master接到命令启动后台的存盘进程，同时收集所有接收到的用于修改数据集命令，在后台进程执行完毕之后，master将传送整个数据文件到slave,以完成一次完全同步</p>
+<p>3、全量复制：而slave服务在接收到数据库文件数据后，将其存盘并加载到内存中。</p>
+<p>4、增量复制：Master继续将新的所有收集到的修改命令依次传给slave,完成同步</p>
+<p>5、但是只要是重新连接master,一次完全同步（全量复制)将被自动执行</p>
+<p>问题点</p>
+<p>同步故障  复制数据延迟(不一致) 读取过期数据(Slave 不能删除数据)           从节点故障     主节点故障</p>
+<p>配置不一致     maxmemory 不一致:丢失数据        优化参数不一致:内存不一致.</p>
+<p>避免全量复制</p>
+<p>选择小主节点(分片)、低峰期间操作.</p>
+<p>如果节点运行 id 不匹配(如主节点重启、运行 id 发送变化)，此时要执行全量复制，应该配合哨兵和集群解决.</p>
+<p>主从复制挤压缓冲区不足产生的问题(网络中断，部分复制无法满足)，可增大复制缓冲区( rel_backlog_size 参数).</p>
+<p>15、哨兵模式<br> 反客为主的自动版，能够后台监控主机是否故障，如果故障了根据投票数自动将从库转换为主库。</p>
+<p>节点下线</p>
+<p>主观下线<br>即 Sentinel 节点对 Redis 节点失败的偏见，超出超时时间认为 Master 已经宕机。<br>Sentinel 集群的每一个 Sentinel 节点会定时对 Redis 集群的所有节点发心跳包检测节点是否正常。如果一个节点在 down-after-milliseconds 时间内没有回复 Sentinel 节点的心跳包，则该 Redis 节点被该 Sentinel 节点主观下线。<br>客观下线<br>所有 Sentinel 节点对 Redis 节点失败要达成共识，即超过 quorum 个统一。<br>当节点被一个 Sentinel 节点记为主观下线时，并不意味着该节点肯定故障了，还需要 Sentinel 集群的其他 Sentinel 节点共同判断为主观下线才行。<br>该 Sentinel 节点会询问其它 Sentinel 节点，如果 Sentinel 集群中超过 quorum 数量的 Sentinel 节点认为该 Redis 节点主观下线，则该 Redis 客观下线。<br>Leader选举</p>
+<p>选举出一个 Sentinel 作为 Leader：集群中至少有三个 Sentinel 节点，但只有其中一个节点可完成故障转移.通过以下命令可以进行失败判定或领导者选举。<br>选举流程<br>每个主观下线的 Sentinel 节点向其他 Sentinel 节点发送命令，要求设置它为领导者.<br>收到命令的 Sentinel 节点如果没有同意通过其他 Sentinel 节点发送的命令，则同意该请求，否则拒绝。<br>如果该 Sentinel 节点发现自己的票数已经超过 Sentinel 集合半数且超过 quorum，则它成为领导者。<br>如果此过程有多个 Sentinel 节点成为领导者，则等待一段时间再重新进行选举。<br>故障转移</p>
+<p>转移流程<br>Sentinel 选出一个合适的 Slave 作为新的 Master(slaveof no one 命令)。<br>向其余 Slave 发出通知，让它们成为新 Master 的 Slave( parallel-syncs 参数)。<br>等待旧 Master 复活，并使之称为新 Master 的 Slave。<br>向客户端通知 Master 变化。<br>从 Slave 中选择新 Master 节点的规则(slave 升级成 master 之后)<br>选择 slave-priority 最高的节点。<br>选择复制偏移量最大的节点(同步数据最多)。<br>选择 runId 最小的节点。<br>Sentinel 集群运行过程中故障转移完成，所有 Sentinel 又会恢复平等。Leader 仅仅是故障转移操作出现的角色。</p>
+<p>读写分离</p>
+<p>定时任务</p>
+<p>每 1s 每个 Sentinel 对其他 Sentinel 和 Redis 执行 ping，进行心跳检测。<br>每 2s 每个 Sentinel 通过 Master 的 Channel 交换信息(pub - sub)。<br>每 10s 每个 Sentinel 对 Master 和 Slave 执行 info，目的是发现 Slave 节点、确定主从关系</p>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/2019/11/10/nginx/" data-toggle="tooltip" data-placement="top" title="Nginx学习总结">Next post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share"  data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+				
+            </div>
+
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">Tags</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#redis" title="redis">redis</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="http://www.sumoon.com" target="_blank">ACE theme</a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'ℬ'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/fenyehenwenr">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 尹盼 2019 
+                    <br>
+                    Powered by <a href="http://www.hexo.io" target="_blank" rel="noopener">Hexo</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Theme by <a href="https://github.com/kinggozhang/hexo-theme-ace" target="_blank" rel="noopener">ACE</a> 
+					
+					
+					<i class="fa fa-eye" id="leancounter"></i>
+					
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+   
+<script src="https://cdn.staticfile.org/jquery/2.2.4/jquery.min.js"></script>
+
+
+
+
+<!-- Bootstrap Core JavaScript -->
+
+   
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+	
+<script src="/js/particles.js"></script>
+
+	
+<script src="/js/particles_config.js"></script>
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/2019/11/11/redis/index.html/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

@@ -18,7 +18,7 @@
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/2019/12/12/my-first-blog/">
+    <link rel="canonical" href="http://yoursite.com/2019/09/05/my-first-blog/">
 
     <!-- Bootstrap Core CSS -->
 
@@ -122,12 +122,16 @@
                     <div class="post-heading" style="padding:40px">
                         <div class="tags">
                             
+                              <a class="tag" href="/tags/#java" title="java">java</a>
+                            
+                              <a class="tag" href="/tags/#jvm" title="jvm">jvm</a>
+                            
                         </div>
                         <h1>JVM面试</h1>
                         <h2 class="subheading"></h2>
                         <span class="meta">
                             Posted by 尹盼 on
-                            2019-12-12
+                            2019-09-05
                         </span>
                     </div>
                 
@@ -149,7 +153,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">欢迎来到尹盼的个人博客</a>
+            <a class="navbar-brand" href="/">尹盼个人博客</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -248,10 +252,7 @@
                 <ol>
 <li>说一下 JVM 有哪些垃圾回收算法？</li>
 </ol>
-<p>标记-清除算法：标记无用对象，然后进行清除回收。缺点：效率不高，无法清除垃圾碎片。</p>
-<p>标记-整理算法：标记无用对象，让所有存活的对象都向一端移动，然后直接清除掉端边界以外的内存。</p>
-<p>复制算法：按照容量划分二个大小相等的内存区域，当一块用完的时候将活着的对象复制到另一块上，然后再把已使用的内存空间一次清理掉。缺点：内存使用率不高，只有原来的一半。</p>
-<p>分代算法：根据对象存活周期的不同将内存划分为几块，一般是新生代和老年代，新生代基本采用复制算法，老年代采用标记整理算法。</p>
+<p>标记-清除算法：标记无用对象，然后进行清除回收。缺点：效率不高，无法清除垃圾碎片。<br>标记-整理算法：标记无用对象，让所有存活的对象都向一端移动，然后直接清除掉端边界以外的内存。<br>复制算法：按照容量划分二个大小相等的内存区域，当一块用完的时候将活着的对象复制到另一块上，然后再把已使用的内存空间一次清理掉。缺点：内存使用率不高，只有原来的一半。<br>分代算法：根据对象存活周期的不同将内存划分为几块，一般是新生代和老年代，新生代基本采用复制算法，老年代采用标记整理算法。</p>
 <a id="more"></a>
 
 <ol start="2">
@@ -369,9 +370,13 @@
                 <!-- Pager -->
                 <ul class="pager">
                     
+                        <li class="previous">
+                            <a href="/2019/11/10/nginx/" data-toggle="tooltip" data-placement="top" title="Nginx学习总结">&larr; Previous post</a>
+                        </li>
+                    
                     
                         <li class="next">
-                            <a href="/2019/12/12/hello-world/" data-toggle="tooltip" data-placement="top" title="Hello World">Next post &rarr;</a>
+                            <a href="/2019/05/10/hello-world/" data-toggle="tooltip" data-placement="top" title="Hello World">Next post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -421,6 +426,10 @@
                     <h5><a href="/tags/">Tags</a></h5>
                     <div class="tags">
                        
+                          <a class="tag" href="/tags/#java" title="java">java</a>
+                        
+                          <a class="tag" href="/tags/#jvm" title="jvm">jvm</a>
+                        
                     </div>
                 </section>
                 
@@ -594,7 +603,7 @@
 <script>
     // only load tagcloud.js in tag.html
     if($('#tag_cloud').length !== 0){
-        async("http://yoursite.com/2019/12/12/my-first-blog/index.html/js/jquery.tagcloud.js",function(){
+        async("http://yoursite.com/2019/09/05/my-first-blog/index.html/js/jquery.tagcloud.js",function(){
             $.fn.tagcloud.defaults = {
                 //size: {start: 1, end: 1, unit: 'em'},
                 color: {start: '#bbbbee', end: '#0085a1'},
